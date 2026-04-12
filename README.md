@@ -12,7 +12,7 @@ The interface presents a set of frequency ratio presets (e.g. 9/7, 13/11) drawn 
 
 Each orbit is a concentric track with a circle traveling along it. When a circle crosses the reference radius (the 12 o'clock line), it emits a tone. The pitch is determined by the orbit's distance from the center, mapped through a configurable tuning system.
 
-> [!info] Backstory
+> [!note] Backstory
 > See [Backstory](#backstory) near the bottom for some more non-technical information.
 
 ## Ratio Presets
