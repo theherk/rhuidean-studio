@@ -1,0 +1,45 @@
+[package]
+name = "rhuidean-studio"
+version = "0.1.0"
+edition = "2024"
+description = "A polyrhythmic orbital music visualizer."
+repository = "https://github.com/theherk/rhuidean-studio"
+license = "MIT"
+
+[lib]
+crate-type = ["cdylib"]
+
+[dependencies]
+wasm-bindgen = "0.2"
+js-sys = "0.3"
+serde = { version = "1", features = ["derive"] }
+serde-wasm-bindgen = "0.6"
+
+[dependencies.web-sys]
+version = "0.3"
+features = [
+    "AudioContext",
+    "AudioDestinationNode",
+    "AudioNode",
+    "AudioParam",
+    "BaseAudioContext",
+    "BiquadFilterNode",
+    "BiquadFilterType",
+    "CanvasRenderingContext2d",
+    "DelayNode",
+    "DelayOptions",
+    "Document",
+    "GainNode",
+    "GainOptions",
+    "HtmlCanvasElement",
+    "OscillatorNode",
+    "OscillatorOptions",
+    "OscillatorType",
+    "Performance",
+    "StereoPannerNode",
+    "Window",
+]
+
+[profile.release]
+opt-level = "s"
+lto = true

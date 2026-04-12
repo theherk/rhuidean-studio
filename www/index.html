@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Rhuidean Studio</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="app">
+        <canvas id="canvas"></canvas>
+        <canvas id="bloom-canvas"></canvas>
+        <div id="controls">
+            <button id="controls-toggle" aria-label="Toggle controls">&#9660;</button>
+            <h1>Rhuidean Studio</h1>
+
+            <div class="control-group" title="Velocity ratio between inner and outer orbits; controls the polyrhythmic convergence pattern">
+                <label for="ratio">Ratio</label>
+                <select id="ratio"></select>
+            </div>
+
+            <div class="control-group" id="custom-ratio-group" style="display:none">
+                <label>Custom</label>
+                <div class="inline">
+                    <input type="number" id="custom-p" min="1" max="99" value="3">
+                    <span>/</span>
+                    <input type="number" id="custom-q" min="1" max="99" value="2">
+                    <span id="custom-name"></span>
+                </div>
+            </div>
+
+            <div class="control-group" title="Number of concentric orbiting circles">
+                <label for="orbits">Orbits: <span id="orbits-val">12</span></label>
+                <input type="range" id="orbits" min="4" max="32" value="12">
+            </div>
+
+            <div class="control-group" title="How speeds are distributed between inner and outer orbits">
+                <label for="velocity-mode">Velocity</label>
+                <select id="velocity-mode">
+                    <option value="linear" title="Evenly spaced speeds between inner and outer">Linear</option>
+                    <option value="geometric" title="Exponentially spaced speeds">Geometric</option>
+                    <option value="inverse_square" title="Kepler-like: faster orbits closer to center">Inverse-Square</option>
+                    <option value="harmonic_series" title="Speeds follow the harmonic series 1/n">Harmonic Series</option>
+                    <option value="integer_harmonic" title="Speeds rounded to integer multiples of the base">Integer Harmonic</option>
+                </select>
+            </div>
+
+            <div class="control-group" title="Pitch mapping system; determines the frequency each orbit plays on crossing">
+                <label for="tuning">Tuning</label>
+                <select id="tuning">
+                    <option value="overtone" title="Frequencies are integer multiples of the base">Overtone Series</option>
+                    <option value="equal_temperament" title="Octave divided into N equal semitones">Equal Temperament</option>
+                    <option value="just_intonation" title="Frequencies from pure whole-number ratios">Just Intonation</option>
+                    <option value="pythagorean" title="Frequencies from stacked perfect fifths (3/2)">Pythagorean</option>
+                </select>
+            </div>
+
+            <div class="control-group" title="Oscillator shape; affects the timbre of triggered tones">
+                <label for="waveform">Waveform</label>
+                <select id="waveform">
+                    <option value="sine">Sine</option>
+                    <option value="triangle">Triangle</option>
+                    <option value="square">Square</option>
+                    <option value="sawtooth">Sawtooth</option>
+                </select>
+            </div>
+
+            <div class="control-group" title="Number of reference lines; orbits trigger on each crossing">
+                <label for="subdivisions">Subdivisions: <span id="subdivisions-val">1</span></label>
+                <input type="range" id="subdivisions" min="1" max="12" value="1">
+            </div>
+
+            <div class="control-group" title="Simulation speed multiplier; negative values reverse direction">
+                <label for="speed">Speed: <span id="speed-val">1.0</span>x</label>
+                <input type="range" id="speed" min="-5" max="5" step="0.1" value="1">
+            </div>
+
+            <div class="control-group" title="Root frequency in Hz; all orbit pitches are derived from this">
+                <label for="base-freq">Base: <span id="freq-val">220</span> Hz</label>
+                <input type="range" id="base-freq" min="55" max="880" step="1" value="220">
+            </div>
+
+            <div class="buttons">
+                <button id="btn-start">Start</button>
+                <button id="btn-stop" disabled>Stop</button>
+                <button id="btn-reset" title="Reset orbit positions to start">Reset</button>
+                <button id="btn-defaults" title="Restore all controls to default values">Defaults</button>
+            </div>
+
+            <details class="advanced-section">
+                <summary>Advanced Audio</summary>
+
+                <div class="control-group" title="Low-pass filter with resonant sweep on each trigger">
+                    <label>
+                        <input type="checkbox" id="filter-enabled"> Filter Envelope
+                    </label>
+                </div>
+
+                <div class="control-group" title="Filter cutoff target frequency in Hz">
+                    <label for="filter-cutoff">Cutoff: <span id="cutoff-val">4000</span> Hz</label>
+                    <input type="range" id="filter-cutoff" min="200" max="12000" step="100" value="4000">
+                </div>
+
+                <div class="control-group" title="Filter resonance peak intensity">
+                    <label for="filter-resonance">Resonance: <span id="resonance-val">2.0</span></label>
+                    <input type="range" id="filter-resonance" min="0.1" max="20" step="0.1" value="2">
+                </div>
+
+                <div class="control-group" title="Feedback delay mix level">
+                    <label for="delay-wet">Delay: <span id="delay-wet-val">0%</span></label>
+                    <input type="range" id="delay-wet" min="0" max="1" step="0.01" value="0">
+                </div>
+
+                <div class="control-group" title="Delay time between echoes in seconds">
+                    <label for="delay-time">Delay Time: <span id="delay-time-val">0.30</span>s</label>
+                    <input type="range" id="delay-time" min="0.05" max="1.5" step="0.01" value="0.3">
+                </div>
+
+                <div class="control-group" title="How much signal feeds back into the delay line">
+                    <label for="delay-feedback">Feedback: <span id="delay-fb-val">40%</span></label>
+                    <input type="range" id="delay-feedback" min="0" max="0.95" step="0.01" value="0.4">
+                </div>
+
+                <div class="control-group" title="Spread orbits across the stereo field (inner=left, outer=right)">
+                    <label>
+                        <input type="checkbox" id="stereo-enabled"> Stereo Panning
+                    </label>
+                </div>
+
+                <div class="control-group" title="Random pitch variation per orbit in cents">
+                    <label for="detune">Detune: <span id="detune-val">0</span> cents</label>
+                    <input type="range" id="detune" min="0" max="50" step="1" value="0">
+                </div>
+
+                <div class="control-group" title="Trigger a chord interval derived from the selected ratio on each crossing">
+                    <label>
+                        <input type="checkbox" id="chord-enabled"> Chord Mode
+                    </label>
+                </div>
+            </details>
+
+            <details class="advanced-section">
+                <summary>Advanced Visual</summary>
+
+                <div class="control-group" title="Draw connecting lines between orbits on convergence events">
+                    <label>
+                        <input type="checkbox" id="convergence-lines"> Convergence Lines
+                    </label>
+                </div>
+
+                <div class="control-group" title="Persistent fading trails that accumulate into spirograph patterns">
+                    <label>
+                        <input type="checkbox" id="spiral-trails"> Spiral Trails
+                    </label>
+                </div>
+
+                <div class="control-group" title="How the traced point is computed between orbits">
+                    <label for="spiral-mode">Spiral Mode</label>
+                    <select id="spiral-mode">
+                        <option value="epitrochoid" title="Single trace from inner+outer orbit angles, like a spirograph pen">Epitrochoid</option>
+                        <option value="adjacent" title="One trace per adjacent orbit pair">Adjacent</option>
+                        <option value="star" title="Traces from inner orbit to evenly spaced outer orbits">Star</option>
+                        <option value="lissajous" title="Traces from mirrored orbit pairs (inner/outer, 2nd/2nd-last, etc.)">Lissajous</option>
+                    </select>
+                </div>
+
+                <div class="control-group" title="Controls the blend position between the two reference points">
+                    <label for="spiral-blend">Blend: <span id="spiral-blend-val">50%</span></label>
+                    <input type="range" id="spiral-blend" min="0" max="100" step="1" value="50">
+                </div>
+
+                <div class="control-group" title="Color palette for the visualization">
+                    <label for="theme">Theme</label>
+                    <select id="theme">
+                        <option value="default">Default</option>
+                        <option value="warm">Warm</option>
+                        <option value="cool">Cool</option>
+                        <option value="mono">Monochrome</option>
+                        <option value="high_contrast">High Contrast</option>
+                    </select>
+                </div>
+
+                <div class="control-group" title="Add a soft glow bloom effect over the visualization">
+                    <label>
+                        <input type="checkbox" id="bloom-enabled"> Bloom / Glow
+                    </label>
+                </div>
+
+                <div class="control-group" title="Intensity of the bloom glow effect">
+                    <label for="bloom-intensity">Bloom: <span id="bloom-val">50%</span></label>
+                    <input type="range" id="bloom-intensity" min="0" max="100" step="1" value="50">
+                </div>
+            </details>
+        </div>
+    </div>
+    <script type="module" src="main.js"></script>
+</body>
+</html>
