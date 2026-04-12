@@ -113,6 +113,19 @@ h1 {
     color: var(--text-bright);
     letter-spacing: 0.1em;
     margin-bottom: 4px;
+    display: flex;
+    align-items: center;
+}
+
+.github-link {
+    margin-left: auto;
+    color: var(--text-muted);
+    display: flex;
+    transition: color 0.15s;
+}
+
+.github-link:hover {
+    color: var(--text-bright);
 }
 
 .control-group {
