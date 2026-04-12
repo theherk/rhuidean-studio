@@ -1,5 +1,9 @@
 # Rhuidean Studio
 
+<p align="center">
+  <img src="assets/rhuidean-studio.svg" alt="Rhuidean Studio" width="200">
+</p>
+
 A polyrhythmic orbital music visualizer. Concentric orbiting circles traverse rings at different angular velocities determined by frequency ratios from just intonation. When each circle crosses a reference line, it triggers a tone whose pitch corresponds to its orbital radius. Over time the system oscillates between chaos and order, eventually converging when all orbits realign simultaneously.
 
 ## Concept
@@ -8,7 +12,7 @@ The interface presents a set of frequency ratio presets (e.g. 9/7, 13/11) drawn 
 
 Each orbit is a concentric track with a circle traveling along it. When a circle crosses the reference radius (the 12 o'clock line), it emits a tone. The pitch is determined by the orbit's distance from the center, mapped through a configurable tuning system.
 
-> [!note] Backstory
+> [!info] Backstory
 > See [Backstory](#backstory) near the bottom for some more non-technical information.
 
 ## Ratio Presets
