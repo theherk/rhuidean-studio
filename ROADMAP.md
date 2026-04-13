@@ -5,13 +5,12 @@
 - **Tap Tempo**: A button or keyboard shortcut to tap a rhythm and derive the base speed from the tap interval.
 - **MIDI Output**: Use `navigator.requestMIDIAccess()` to send MIDI note-on/note-off messages, mapping each orbit to a configurable MIDI note and channel.
 - **MIDI Input**: Accept MIDI CC messages for real-time parameter control (speed, base frequency, subdivisions).
-- **Preset System**: Save and load full configurations via `localStorage` and/or shareable URL hash encoding.
+- **Preset System**: Save and load named configurations via `localStorage`.
 - **Scale Constraint**: Quantize tuning output to a selected musical scale (major, minor, pentatonic, etc.) so the output always sounds harmonically coherent.
 
-## Export and Sharing
+## Export
 
 - **Record to WAV/WebM**: Use `MediaRecorder` on `AudioContext.createMediaStreamDestination()` to capture audio output, optionally with canvas video via `canvas.captureStream()`.
-- **Shareable URL**: Encode all parameters into a URL hash so configurations can be shared as links.
 
 ## Sequencing
 
