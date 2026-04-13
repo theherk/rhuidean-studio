@@ -497,6 +497,13 @@ async function main() {
         setTimeout(() => { btnShare.innerHTML = iconLink; }, 1500);
     }
 
+    function updateHash() {
+        history.replaceState(null, "", "#" + encodeParams());
+    }
+
+    controlsEl.addEventListener("input", updateHash);
+    controlsEl.addEventListener("change", updateHash);
+
     decodeParams();
     syncAll();
     ensureLoop();
