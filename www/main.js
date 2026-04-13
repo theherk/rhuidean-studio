@@ -45,8 +45,7 @@ async function main() {
     const speedVal = document.getElementById("speed-val");
     const baseFreqEl = document.getElementById("base-freq");
     const freqVal = document.getElementById("freq-val");
-    const btnStart = document.getElementById("btn-start");
-    const btnStop = document.getElementById("btn-stop");
+    const btnPlay = document.getElementById("btn-play");
     const btnReset = document.getElementById("btn-reset");
 
     ratioEl.addEventListener("change", () => {
@@ -247,21 +246,28 @@ async function main() {
         }
     }
 
-    btnStart.addEventListener("click", () => {
-        app.start();
-        btnStart.disabled = true;
-        btnStop.disabled = false;
-        ensureLoop();
-    });
+    const iconPlay = '<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg>';
+    const iconPause = '<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><rect x="5" y="3" width="4" height="18"/><rect x="15" y="3" width="4" height="18"/></svg>';
+    const iconLink = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>';
+    const iconCheck = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20,6 9,17 4,12"/></svg>';
 
-    btnStop.addEventListener("click", () => {
-        app.stop();
-        btnStart.disabled = false;
-        btnStop.disabled = true;
+    btnPlay.addEventListener("click", () => {
+        if (app.is_running()) {
+            app.stop();
+            btnPlay.innerHTML = iconPlay;
+            btnPlay.classList.remove("active");
+        } else {
+            app.start();
+            btnPlay.innerHTML = iconPause;
+            btnPlay.classList.add("active");
+            ensureLoop();
+        }
     });
 
     btnReset.addEventListener("click", () => {
         app.reset();
+        btnPlay.innerHTML = iconPlay;
+        btnPlay.classList.remove("active");
         ensureLoop();
     });
 
@@ -394,6 +400,104 @@ async function main() {
         }, 50);
     });
 
+    function encodeParams() {
+        const p = new URLSearchParams();
+        p.set("r", ratioEl.value);
+        if (ratioEl.value === "custom") {
+            p.set("cp", customP.value);
+            p.set("cq", customQ.value);
+        }
+        p.set("o", orbitsEl.value);
+        p.set("v", velocityEl.value);
+        p.set("t", tuningEl.value);
+        p.set("w", waveformEl.value);
+        p.set("sub", subdivisionsEl.value);
+        p.set("s", speedEl.value);
+        p.set("f", baseFreqEl.value);
+        if (filterEnabled.checked) p.set("fe", "1");
+        if (filterCutoff.value !== "4000") p.set("fc", filterCutoff.value);
+        if (filterResonance.value !== "2") p.set("fr", filterResonance.value);
+        if (delayWet.value !== "0") p.set("dw", delayWet.value);
+        if (delayTime.value !== "0.3") p.set("dt", delayTime.value);
+        if (delayFeedback.value !== "0.4") p.set("df", delayFeedback.value);
+        if (stereoEnabled.checked) p.set("st", "1");
+        if (detuneEl.value !== "0") p.set("de", detuneEl.value);
+        if (chordEnabled.checked) p.set("ch", "1");
+        if (convergenceLines.checked) p.set("cl", "1");
+        if (spiralTrails.checked) p.set("sp", "1");
+        if (spiralMode.value !== "epitrochoid") p.set("sm", spiralMode.value);
+        if (spiralBlend.value !== "50") p.set("sb", spiralBlend.value);
+        if (themeEl.value !== "default") p.set("th", themeEl.value);
+        if (bloomEnabled.checked) p.set("bl", "1");
+        if (bloomIntensity.value !== "50") p.set("bi", bloomIntensity.value);
+        return p.toString();
+    }
+
+    function decodeParams() {
+        const hash = window.location.hash.slice(1);
+        if (!hash) return;
+        const p = new URLSearchParams(hash);
+        if (p.has("r")) ratioEl.value = p.get("r");
+        if (p.get("r") === "custom") {
+            customGroup.style.display = "";
+            if (p.has("cp")) customP.value = p.get("cp");
+            if (p.has("cq")) customQ.value = p.get("cq");
+        }
+        if (p.has("o")) orbitsEl.value = p.get("o");
+        if (p.has("v")) velocityEl.value = p.get("v");
+        if (p.has("t")) tuningEl.value = p.get("t");
+        if (p.has("w")) waveformEl.value = p.get("w");
+        if (p.has("sub")) subdivisionsEl.value = p.get("sub");
+        if (p.has("s")) speedEl.value = p.get("s");
+        if (p.has("f")) baseFreqEl.value = p.get("f");
+        filterEnabled.checked = p.has("fe");
+        if (p.has("fc")) filterCutoff.value = p.get("fc");
+        if (p.has("fr")) filterResonance.value = p.get("fr");
+        if (p.has("dw")) delayWet.value = p.get("dw");
+        if (p.has("dt")) delayTime.value = p.get("dt");
+        if (p.has("df")) delayFeedback.value = p.get("df");
+        stereoEnabled.checked = p.has("st");
+        if (p.has("de")) detuneEl.value = p.get("de");
+        chordEnabled.checked = p.has("ch");
+        convergenceLines.checked = p.has("cl");
+        spiralTrails.checked = p.has("sp");
+        if (p.has("sm")) spiralMode.value = p.get("sm");
+        if (p.has("sb")) spiralBlend.value = p.get("sb");
+        if (p.has("th")) themeEl.value = p.get("th");
+        bloomEnabled.checked = p.has("bl");
+        if (p.has("bi")) bloomIntensity.value = p.get("bi");
+    }
+
+    const btnShare = document.getElementById("btn-share");
+    btnShare.addEventListener("click", () => {
+        const url = window.location.origin + window.location.pathname + "#" + encodeParams();
+        window.location.hash = encodeParams();
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(url).then(() => {
+                btnShare.innerHTML = iconCheck;
+                setTimeout(() => { btnShare.innerHTML = iconLink; }, 1500);
+            }, () => {
+                fallbackCopy(url);
+            });
+        } else {
+            fallbackCopy(url);
+        }
+    });
+
+    function fallbackCopy(text) {
+        const ta = document.createElement("textarea");
+        ta.value = text;
+        ta.style.position = "fixed";
+        ta.style.opacity = "0";
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand("copy");
+        document.body.removeChild(ta);
+        btnShare.innerHTML = iconCheck;
+        setTimeout(() => { btnShare.innerHTML = iconLink; }, 1500);
+    }
+
+    decodeParams();
     syncAll();
     ensureLoop();
 }

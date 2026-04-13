@@ -216,7 +216,19 @@ button {
     font-size: 12px;
     cursor: pointer;
     transition: background 0.15s;
-    min-width: 60px;
+    min-width: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+button svg {
+    display: block;
+}
+
+button.active {
+    background: var(--btn-hover);
+    border-color: var(--input-focus);
 }
 
 button:hover:not(:disabled) {
