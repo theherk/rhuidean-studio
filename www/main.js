@@ -257,47 +257,60 @@ async function main() {
         }
     });
 
-    btnReset.addEventListener("click", () => {
-        app.reset();
-        btnPlay.innerHTML = iconPlay;
-        btnPlay.classList.remove("active");
-        ensureLoop();
-    });
+    let resetPrimed = false;
+    let resetTimer = null;
 
-    const btnDefaults = document.getElementById("btn-defaults");
-    btnDefaults.addEventListener("click", () => {
-        ratioEl.value = "3/2";
-        customGroup.style.display = "none";
-        customP.value = 3;
-        customQ.value = 2;
-        customName.textContent = "";
-        orbitsEl.value = 12;
-        velocityEl.value = "linear";
-        tuningEl.value = "overtone";
-        waveformEl.value = "sine";
-        subdivisionsEl.value = 1;
-        speedEl.value = 1;
-        baseFreqEl.value = 220;
-        filterEnabled.checked = false;
-        filterCutoff.value = 4000;
-        filterResonance.value = 2;
-        delayWet.value = 0;
-        delayTime.value = 0.3;
-        delayFeedback.value = 0.4;
-        stereoEnabled.checked = false;
-        detuneEl.value = 0;
-        chordEnabled.checked = false;
-        convergenceLines.checked = false;
-        spiralTrails.checked = false;
-        spiralMode.value = "epitrochoid";
-        spiralBlend.value = 50;
-        themeEl.value = "default";
-        bloomEnabled.checked = false;
-        bloomIntensity.value = 50;
-        bloomActive = false;
-        bloomCanvas.style.display = "none";
-        syncAll();
-        app.reset();
+    btnReset.addEventListener("click", () => {
+        if (resetPrimed) {
+            clearTimeout(resetTimer);
+            resetPrimed = false;
+            btnReset.classList.remove("primed");
+            app.stop();
+            ratioEl.value = "3/2";
+            customGroup.style.display = "none";
+            customP.value = 3;
+            customQ.value = 2;
+            customName.textContent = "";
+            orbitsEl.value = 12;
+            velocityEl.value = "linear";
+            tuningEl.value = "overtone";
+            waveformEl.value = "sine";
+            subdivisionsEl.value = 1;
+            speedEl.value = 1;
+            baseFreqEl.value = 220;
+            filterEnabled.checked = false;
+            filterCutoff.value = 4000;
+            filterResonance.value = 2;
+            delayWet.value = 0;
+            delayTime.value = 0.3;
+            delayFeedback.value = 0.4;
+            stereoEnabled.checked = false;
+            detuneEl.value = 0;
+            chordEnabled.checked = false;
+            convergenceLines.checked = false;
+            spiralTrails.checked = false;
+            spiralMode.value = "epitrochoid";
+            spiralBlend.value = 50;
+            themeEl.value = "catppuccin";
+            bloomEnabled.checked = false;
+            bloomIntensity.value = 50;
+            bloomActive = false;
+            bloomCanvas.style.display = "none";
+            syncAll();
+            app.reset();
+            btnPlay.innerHTML = iconPlay;
+            btnPlay.classList.remove("active");
+        } else {
+            app.reset();
+            btnPlay.innerHTML = iconPlay;
+            btnPlay.classList.remove("active");
+            resetPrimed = true;
+            btnReset.classList.add("primed");
+            resetTimer = setTimeout(() => {
+                resetPrimed = false;
+                btnReset.classList.remove("primed");
+            }, 2000);
+        }
         ensureLoop();
     });
 
@@ -419,7 +432,7 @@ async function main() {
         if (spiralTrails.checked) p.set("sp", "1");
         if (spiralMode.value !== "epitrochoid") p.set("sm", spiralMode.value);
         if (spiralBlend.value !== "50") p.set("sb", spiralBlend.value);
-        if (themeEl.value !== "default") p.set("th", themeEl.value);
+        if (themeEl.value !== "catppuccin") p.set("th", themeEl.value);
         if (bloomEnabled.checked) p.set("bl", "1");
         if (bloomIntensity.value !== "50") p.set("bi", bloomIntensity.value);
         return p.toString();

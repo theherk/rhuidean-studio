@@ -20,6 +20,17 @@ pub struct Theme {
 }
 
 const THEME_DEFAULT: Theme = Theme {
+    background: "#303446",
+    track_alpha: 0.15,
+    reference_alpha: 0.3,
+    flash_color: "rgba(198, 208, 245, 0.9)",
+    hue_offset: 0.0,
+    hue_range: 300.0,
+    saturation: 65.0,
+    lightness: 65.0,
+};
+
+const THEME_CLASSIC: Theme = Theme {
     background: "rgb(10, 10, 15)",
     track_alpha: 0.08,
     reference_alpha: 0.25,
@@ -75,6 +86,17 @@ const THEME_HIGH_CONTRAST: Theme = Theme {
 };
 
 const THEME_DEFAULT_LIGHT: Theme = Theme {
+    background: "#eff1f5",
+    track_alpha: 0.15,
+    reference_alpha: 0.35,
+    flash_color: "rgba(76, 79, 105, 0.9)",
+    hue_offset: 0.0,
+    hue_range: 300.0,
+    saturation: 55.0,
+    lightness: 40.0,
+};
+
+const THEME_CLASSIC_LIGHT: Theme = Theme {
     background: "rgb(240, 240, 245)",
     track_alpha: 0.12,
     reference_alpha: 0.3,
@@ -243,6 +265,7 @@ impl Renderer {
     fn apply_theme(&mut self) {
         self.theme = if self.light_mode {
             match self.theme_name.as_str() {
+                "classic" => THEME_CLASSIC_LIGHT,
                 "warm" => THEME_WARM_LIGHT,
                 "cool" => THEME_COOL_LIGHT,
                 "mono" => THEME_MONO_LIGHT,
@@ -251,6 +274,7 @@ impl Renderer {
             }
         } else {
             match self.theme_name.as_str() {
+                "classic" => THEME_CLASSIC,
                 "warm" => THEME_WARM,
                 "cool" => THEME_COOL,
                 "mono" => THEME_MONO,

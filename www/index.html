@@ -96,8 +96,7 @@
 
             <div class="buttons">
                 <button id="btn-play" title="Play / Pause"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg></button>
-                <button id="btn-reset" title="Reset orbit positions to start"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="5" width="14" height="14" rx="1"/></svg></button>
-                <button id="btn-defaults" title="Restore all controls to default values"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1,4 1,10 7,10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg></button>
+                <button id="btn-reset" title="Reset orbits. Click again quickly to restore all defaults."><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1,4 1,10 7,10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg></button>
                 <button id="btn-share" title="Copy shareable URL to clipboard"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg></button>
             </div>
 
@@ -186,7 +185,8 @@
                 <div class="control-group" title="Color palette for the visualization">
                     <label for="theme">Theme</label>
                     <select id="theme">
-                        <option value="default">Default</option>
+                        <option value="catppuccin">Catppuccin</option>
+                        <option value="classic">Classic</option>
                         <option value="warm">Warm</option>
                         <option value="cool">Cool</option>
                         <option value="mono">Monochrome</option>
