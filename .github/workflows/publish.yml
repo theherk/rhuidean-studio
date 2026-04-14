@@ -12,6 +12,9 @@ jobs:
 
       - uses: dtolnay/rust-toolchain@nightly
 
+      - name: Install system dependencies
+        run: sudo apt-get update && sudo apt-get install -y libasound2-dev
+
       - name: Publish core
         run: cargo publish -p rhuidean-studio-core
         env:
