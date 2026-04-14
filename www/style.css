@@ -208,7 +208,6 @@ input[type="range"]::-webkit-slider-thumb {
 .buttons {
     display: flex;
     gap: 8px;
-    margin-top: 6px;
     flex-wrap: wrap;
 }
 
