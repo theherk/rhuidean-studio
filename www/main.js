@@ -4,25 +4,29 @@ async function main() {
     await init();
 
     const canvas = document.getElementById("canvas");
+    const bloomCanvas = document.getElementById("bloom-canvas");
+    const bloomCtx = bloomCanvas.getContext("2d");
     const dpr = window.devicePixelRatio || 1;
+    let bloomActive = false;
 
-    function sizeCanvas() {
+    function sizeCanvases() {
         const rect = canvas.getBoundingClientRect();
         canvas.width = rect.width * dpr;
         canvas.height = rect.height * dpr;
+        if (bloomActive) {
+            bloomCanvas.width = rect.width * dpr;
+            bloomCanvas.height = rect.height * dpr;
+        }
         return { w: canvas.width, h: canvas.height };
     }
 
-    let { w, h } = sizeCanvas();
+    let { w, h } = sizeCanvases();
     const app = new RhuideanStudio(canvas);
     app.resize(w, h);
 
     window.addEventListener("resize", () => {
-        let { w, h } = sizeCanvas();
+        let { w, h } = sizeCanvases();
         app.resize(w, h);
-        if (bloomActive) {
-            sizeBloomCanvas();
-        }
         ensureLoop();
     });
 
@@ -198,23 +202,12 @@ async function main() {
     const bloomEnabled = document.getElementById("bloom-enabled");
     const bloomIntensity = document.getElementById("bloom-intensity");
     const bloomVal = document.getElementById("bloom-val");
-    const bloomCanvas = document.getElementById("bloom-canvas");
-    const bloomCtx = bloomCanvas.getContext("2d");
-    let bloomActive = false;
-
-    function sizeBloomCanvas() {
-        const rect = canvas.getBoundingClientRect();
-        bloomCanvas.width = rect.width * dpr;
-        bloomCanvas.height = rect.height * dpr;
-        bloomCanvas.style.width = rect.width + "px";
-        bloomCanvas.style.height = rect.height + "px";
-    }
 
     bloomEnabled.addEventListener("change", () => {
         bloomActive = bloomEnabled.checked;
         bloomCanvas.style.display = bloomActive ? "block" : "none";
         if (bloomActive) {
-            sizeBloomCanvas();
+            sizeCanvases();
             bloomCanvas.style.opacity = parseInt(bloomIntensity.value) / 100;
         }
     });
@@ -374,7 +367,7 @@ async function main() {
         bloomActive = bloomEnabled.checked;
         bloomCanvas.style.display = bloomActive ? "block" : "none";
         if (bloomActive) {
-            sizeBloomCanvas();
+            sizeCanvases();
             bloomCanvas.style.opacity = parseInt(bloomIntensity.value) / 100;
         }
         bloomVal.textContent = parseInt(bloomIntensity.value) + "%";
@@ -393,9 +386,8 @@ async function main() {
         controlsEl.classList.toggle("collapsed");
         controlsToggle.innerHTML = controlsEl.classList.contains("collapsed") ? "&#9650;" : "&#9660;";
         setTimeout(() => {
-            let { w, h } = sizeCanvas();
+            let { w, h } = sizeCanvases();
             app.resize(w, h);
-            if (bloomActive) sizeBloomCanvas();
             ensureLoop();
         }, 50);
     });
