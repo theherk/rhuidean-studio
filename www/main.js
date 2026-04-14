@@ -302,8 +302,6 @@ async function main() {
             btnPlay.classList.remove("active");
         } else {
             app.reset();
-            btnPlay.innerHTML = iconPlay;
-            btnPlay.classList.remove("active");
             resetPrimed = true;
             btnReset.classList.add("primed");
             resetTimer = setTimeout(() => {
