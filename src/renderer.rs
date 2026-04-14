@@ -354,15 +354,15 @@ impl Renderer {
                     SpiralMode::Epitrochoid => {
                         let inner = &system.orbits[0];
                         let outer = &system.orbits[num_orbits - 1];
-                        let big_r = outer.radius_fraction * max_radius;
-                        let small_r = inner.radius_fraction * max_radius * b;
+                        let big_r = outer.radius_fraction;
+                        let small_r = inner.radius_fraction * b;
                         (inner.angle, outer.angle, big_r, small_r)
                     }
                     SpiralMode::Adjacent => {
                         let o1 = &system.orbits[i];
                         let o2 = &system.orbits[i + 1];
-                        let r_big = o2.radius_fraction * max_radius;
-                        let r_small = (o2.radius_fraction - o1.radius_fraction) * max_radius * b;
+                        let r_big = o2.radius_fraction;
+                        let r_small = (o2.radius_fraction - o1.radius_fraction) * b;
                         (o1.angle, o2.angle, r_big, r_small)
                     }
                     SpiralMode::Star => {
@@ -371,8 +371,8 @@ impl Renderer {
                         let idx2 = ((i + 1) * step).min(num_orbits - 1);
                         let o1 = &system.orbits[idx1];
                         let o2 = &system.orbits[idx2];
-                        let r_big = o2.radius_fraction * max_radius;
-                        let r_small = o1.radius_fraction * max_radius * b;
+                        let r_big = o2.radius_fraction;
+                        let r_small = o1.radius_fraction * b;
                         (o1.angle, o2.angle, r_big, r_small)
                     }
                     SpiralMode::Lissajous => {
@@ -383,16 +383,16 @@ impl Renderer {
                         }
                         let o1 = &system.orbits[idx1];
                         let o2 = &system.orbits[idx2];
-                        let r_big = o2.radius_fraction * max_radius * 0.5;
-                        let r_small = o1.radius_fraction * max_radius * b;
+                        let r_big = o2.radius_fraction * 0.5;
+                        let r_small = o1.radius_fraction * b;
                         (o1.angle, o2.angle, r_big, r_small)
                     }
                 };
 
-                let px = cx + r1 * a2.sin() + r2 * a1.sin();
-                let py = cy - r1 * a2.cos() - r2 * a1.cos();
+                let nx = r1 * a2.sin() + r2 * a1.sin();
+                let ny = -(r1 * a2.cos() + r2 * a1.cos());
 
-                self.spiral_points[i].push_back((px, py));
+                self.spiral_points[i].push_back((nx, ny));
                 while self.spiral_points[i].len() > max_spiral {
                     self.spiral_points[i].pop_front();
                 }
@@ -403,11 +403,13 @@ impl Renderer {
                 let len = points.len();
                 if len >= 2 {
                     self.ctx.begin_path();
-                    let (x0, y0) = points[0];
-                    self.ctx.move_to(x0, y0);
+                    let (nx0, ny0) = points[0];
+                    self.ctx
+                        .move_to(cx + nx0 * max_radius, cy + ny0 * max_radius);
                     for j in 1..len {
-                        let (xj, yj) = points[j];
-                        self.ctx.line_to(xj, yj);
+                        let (nxj, nyj) = points[j];
+                        self.ctx
+                            .line_to(cx + nxj * max_radius, cy + nyj * max_radius);
                     }
                     self.ctx.set_stroke_style_str(&orbit_color_alpha(
                         &self.theme,
@@ -430,7 +432,9 @@ impl Renderer {
             current_positions.push((x, y));
 
             if i < self.trails.len() {
-                self.trails[i].push_back((x, y));
+                let nx = orbit.radius_fraction * orbit.angle.sin();
+                let ny = -(orbit.radius_fraction * orbit.angle.cos());
+                self.trails[i].push_back((nx, ny));
                 while self.trails[i].len() > TRAIL_LENGTH {
                     self.trails[i].pop_front();
                 }
@@ -441,14 +445,16 @@ impl Renderer {
             if trail_len >= 2 {
                 let segments = trail_len - 1;
                 for j in 0..segments {
-                    let (x0, y0) = trail[j];
-                    let (x1, y1) = trail[j + 1];
+                    let (nx0, ny0) = trail[j];
+                    let (nx1, ny1) = trail[j + 1];
                     let t = (j + 1) as f64 / segments as f64;
                     let alpha = t * 0.5;
                     let width = 2.0 + t * 4.0;
                     self.ctx.begin_path();
-                    self.ctx.move_to(x0, y0);
-                    self.ctx.line_to(x1, y1);
+                    self.ctx
+                        .move_to(cx + nx0 * max_radius, cy + ny0 * max_radius);
+                    self.ctx
+                        .line_to(cx + nx1 * max_radius, cy + ny1 * max_radius);
                     self.ctx.set_stroke_style_str(&orbit_color_alpha(
                         &self.theme,
                         i,
