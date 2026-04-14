@@ -416,14 +416,35 @@ async function main() {
 
     const controlsEl = document.getElementById("controls");
     const controlsToggle = document.getElementById("controls-toggle");
-    controlsToggle.addEventListener("click", () => {
-        controlsEl.classList.toggle("collapsed");
-        controlsToggle.innerHTML = controlsEl.classList.contains("collapsed") ? "&#9650;" : "&#9660;";
+    const controlsCollapse = document.getElementById("controls-collapse");
+
+    function setControlsCollapsed(collapsed) {
+        if (collapsed) {
+            controlsEl.classList.add("collapsed");
+            controlsToggle.classList.add("visible");
+        } else {
+            controlsEl.classList.remove("collapsed");
+            controlsToggle.classList.remove("visible");
+        }
         setTimeout(() => {
             let { w, h } = sizeCanvases();
             app.resize(w, h);
             ensureLoop();
         }, 50);
+    }
+
+    function toggleControls() {
+        setControlsCollapsed(!controlsEl.classList.contains("collapsed"));
+    }
+
+    controlsCollapse.addEventListener("click", () => setControlsCollapsed(true));
+    controlsToggle.addEventListener("click", () => setControlsCollapsed(false));
+
+    document.addEventListener("keydown", (e) => {
+        if (e.key === "Tab" && !e.ctrlKey && !e.metaKey) {
+            e.preventDefault();
+            toggleControls();
+        }
     });
 
     function encodeParams() {

@@ -20,4 +20,3 @@
 
 - **SoundFont / Sample Audio**: Replace or supplement oscillator synthesis with SoundFont or sample-based playback for richer timbres.
 - **Mobile Touch**: Touch-friendly controls, swipe gestures for speed, and pinch-to-zoom on the canvas.
-- **Web Controls Collapse**: Toggleable controls panel with Tab key and click affordance.

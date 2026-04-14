@@ -110,8 +110,57 @@ body {
     gap: 14px;
 }
 
-#controls-toggle {
+.controls-toggle-bar {
     display: none;
+    width: 24px;
+    min-width: 24px;
+    background: var(--panel-bg);
+    border: none;
+    border-left: 1px solid var(--border);
+    color: var(--text-muted);
+    cursor: pointer;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    flex: none;
+    transition: color 0.15s;
+}
+
+.controls-toggle-bar:hover {
+    color: var(--text-bright);
+}
+
+.controls-toggle-bar.visible {
+    display: flex;
+}
+
+.header-icon-btn {
+    background: var(--btn-bg);
+    border: 1px solid var(--btn-border);
+    border-radius: 4px;
+    color: var(--text-muted);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4px;
+    margin-left: 12px;
+    min-width: unset;
+    flex: none;
+    transition: color 0.15s, background 0.15s;
+}
+
+.header-icon-btn:hover {
+    color: var(--text-bright);
+    background: var(--btn-hover);
+}
+
+#controls.collapsed {
+    width: 0;
+    min-width: 0;
+    padding: 0;
+    overflow: hidden;
+    border-left: none;
 }
 
 h1 {
@@ -333,28 +382,18 @@ input[type="checkbox"] {
     }
 
     #controls.collapsed {
-        max-height: 44px;
+        max-height: 0;
         overflow: hidden;
-        padding-bottom: 0;
+        padding: 0;
+        border-top: none;
     }
 
-    #controls-toggle {
-        display: block;
-        position: absolute;
-        top: 0;
-        right: 0;
-        background: none;
-        border: none;
-        color: var(--text-muted);
-        font-size: 18px;
-        padding: 8px 12px;
+    .controls-toggle-bar.visible {
+        width: 100%;
         min-width: unset;
-        flex: none;
-        z-index: 1;
-    }
-
-    #controls-toggle:hover {
-        color: var(--text);
+        height: 28px;
+        border-left: none;
+        border-top: 1px solid var(--border);
     }
 
     h1 {
