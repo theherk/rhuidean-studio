@@ -248,4 +248,8 @@ impl RhuideanStudio {
     pub fn get_intervals_json(&self) -> JsValue {
         serde_wasm_bindgen::to_value(tuning::INTERVALS).unwrap_or(JsValue::NULL)
     }
+
+    pub fn version(&self) -> String {
+        env!("CARGO_PKG_VERSION").to_string()
+    }
 }

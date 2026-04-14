@@ -101,7 +101,7 @@ pub fn spawn_audio_thread(
     let host = cpal::default_host();
     let device = host.default_output_device()?;
     let config = device.default_output_config().ok()?;
-    let sample_rate = config.sample_rate().0 as f64;
+    let sample_rate = config.sample_rate() as f64;
     let channels = config.channels() as usize;
 
     let voices: Arc<Mutex<Vec<Voice>>> = Arc::new(Mutex::new(Vec::new()));

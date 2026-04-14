@@ -561,6 +561,7 @@ async function main() {
 
     decodeParams();
     syncAll();
+    document.getElementById("version-info").textContent = "v" + app.version();
     ensureLoop();
 }
 
