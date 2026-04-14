@@ -6,6 +6,40 @@
 
 A polyrhythmic orbital music visualizer. Concentric orbiting circles traverse rings at different angular velocities determined by frequency ratios from just intonation. When each circle crosses a reference line, it triggers a tone whose pitch corresponds to its orbital radius. Over time the system oscillates between chaos and order, eventually converging when all orbits realign simultaneously.
 
+## Web
+
+Try it live at [rhuidean.studio](https://rhuidean.studio).
+
+## TUI
+
+Install from [crates.io](https://crates.io/crates/rhuidean-studio):
+
+```sh
+cargo install rhuidean-studio
+```
+
+Run:
+
+```sh
+rhuidean-studio
+```
+
+### Controls
+
+| Key | Action |
+|-----|--------|
+| Space | Play / Pause |
+| Tab | Toggle controls panel |
+| j / Down | Move cursor down |
+| k / Up | Move cursor up |
+| h / Left | Decrease / previous |
+| l / Right | Increase / next |
+| r | Reset orbits |
+| r r | Reset to defaults (double-tap) |
+| y | Yank share command |
+| ? | Help |
+| q / Esc | Quit |
+
 ## Concept
 
 The interface presents a set of frequency ratio presets (e.g. 9/7, 13/11) drawn from musical interval theory. These ratios control the relationship between the angular velocities of the innermost and outermost orbits. Intermediate orbits are interpolated between these extremes using a configurable distribution mode.
@@ -85,7 +119,7 @@ Custom ratios can also be entered manually. If a custom ratio matches a known in
 
 ### Number of Orbits
 
-Configurable from 4 to 32 (default: 12). Can be grounded in tonation systems; for example, 12 maps naturally to chromatic tunings.
+Configurable from 2 to 32 (default: 12). Can be grounded in tonation systems; for example, 12 maps naturally to chromatic tunings.
 
 ### Velocity Distribution
 
@@ -104,6 +138,10 @@ Maps orbit index to pitch frequency:
 - **Just Intonation**: Pure frequency ratios derived from small whole numbers.
 - **Pythagorean**: Stacked perfect fifths (3:2 ratio).
 
+### Scale
+
+Optionally assign each orbit to successive degrees of a musical scale, bypassing the tuning system. Available scales include diatonic modes (Ionian through Locrian), pentatonic (major/minor), blues, whole tone, harmonic minor, melodic minor, and chromatic.
+
 ### Waveform
 
 Oscillator type for tone generation: Sine, Square, Triangle, or Sawtooth.
@@ -116,40 +154,51 @@ Playback speed multiplier for slow-motion or fast-forward.
 
 ```
 rhuidean-studio/
-├── Cargo.toml
-├── README.md
-├── src/
-│   ├── lib.rs          # wasm entry point, exports to JS
-│   ├── simulation.rs   # orbital mechanics
-│   ├── tuning.rs       # pitch mapping systems and interval table
-│   ├── audio.rs        # Web Audio API wrapper
-│   └── renderer.rs     # Canvas 2D drawing
-├── www/
-│   ├── index.html      # page shell + controls
-│   ├── main.js         # wasm loader + control wiring
-│   └── style.css       # minimal styling
-└── Makefile            # build and serve commands
+├── Cargo.toml            # workspace root
+├── core/                 # shared simulation, tuning, and scale logic
+│   └── src/
+│       ├── lib.rs
+│       ├── simulation.rs
+│       ├── tuning.rs
+│       └── scale.rs
+├── web/                  # WASM web frontend
+│   ├── src/
+│   │   ├── lib.rs        # wasm entry point
+│   │   ├── audio.rs      # Web Audio API wrapper
+│   │   └── renderer.rs   # Canvas 2D drawing
+│   └── www/
+│       ├── index.html
+│       ├── main.js
+│       └── style.css
+├── tui/                  # terminal UI
+│   └── src/
+│       ├── main.rs       # event loop
+│       ├── app.rs        # application state
+│       ├── audio.rs      # cpal audio engine
+│       ├── renderer.rs   # terminal visualization
+│       └── ui.rs         # controls panel
+├── assets/
+└── Makefile
 ```
 
 ### Stack
 
-- **Rust** compiled to WebAssembly via `wasm-pack`
-- **wasm-bindgen** + **web-sys** for browser API access
-- **HTML Canvas 2D** for rendering
-- **Web Audio API** for sound synthesis
-- **Vanilla JS** for the control panel UI
+- **Core**: Pure Rust simulation, tuning systems, scale logic (no platform dependencies)
+- **Web**: Rust/WASM via `wasm-pack`, `web-sys` for Canvas 2D and Web Audio API, vanilla JS controls
+- **TUI**: `ratatui` + `crossterm` for terminal rendering, `cpal` for native audio synthesis
 
 ### Build
 
 ```sh
-# Install wasm-pack if needed
+# Web
 cargo install wasm-pack
-
-# Build the wasm module
-wasm-pack build --target web
-
-# Serve locally
+wasm-pack build --target web web
 python3 -m http.server 8090
+# visit http://localhost:8090/web/www/
+
+# TUI
+cargo build --release -p rhuidean-studio
+./target/release/rhuidean-studio
 ```
 
 ## Cycle Length
@@ -162,7 +211,7 @@ See [ROADMAP.md](ROADMAP.md) for planned features.
 
 ## Backstory
 
-Many years ago, in the early internet days, I came across a website. I've sought it again for years and even reached out to many professional contacts to find it. I never did.
+Many years ago, in the early internet days, I came across a website. I've sought it again for years and even reached out to many professional contacts to find it. I never did, so now I want to attempt to recreate it.
 
 It was a web interface that consisted of a few options. If I remember correctly, they were options much like those available here. The outcome was a ring around which travelled smaller orbiting circles. These circles were evenly distributed from near the center to the circumference along a radius. When the animation began, they started to travel. The difference in angular velocity between the inner and outer orbits varied based on the set values as well. When each orbiting circle passed the original radius, it would make a sound whose note was in accordance with the distance from the center.
 

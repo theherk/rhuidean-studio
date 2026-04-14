@@ -5,13 +5,16 @@ version.workspace = true
 edition.workspace = true
 repository.workspace = true
 license.workspace = true
+keywords = ["music", "visualizer", "polyrhythm", "tui", "audio"]
+categories = ["multimedia::audio", "command-line-utilities", "visualization"]
+readme = "../README.md"
 
 [[bin]]
 name = "rhuidean-studio"
 path = "src/main.rs"
 
 [dependencies]
-rhuidean-studio-core = { path = "../core" }
+rhuidean-studio-core = { path = "../core", version = "0.1.0" }
 ratatui = "0.29"
 crossterm = "0.28"
 cpal = "0.15"

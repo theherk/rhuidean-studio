@@ -5,6 +5,9 @@ version.workspace = true
 edition.workspace = true
 repository.workspace = true
 license.workspace = true
+keywords = ["music", "simulation", "tuning", "polyrhythm"]
+categories = ["multimedia::audio", "science"]
+readme = "../README.md"
 
 [features]
 default = []
