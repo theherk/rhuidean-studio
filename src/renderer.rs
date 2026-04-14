@@ -296,6 +296,10 @@ impl Renderer {
     }
 
     pub fn reset_trails(&mut self) {
+        for timer in &mut self.flash_timers {
+            *timer = 0.0;
+        }
+        self.convergence_timer = 0.0;
         for points in &mut self.spiral_points {
             points.clear();
         }
