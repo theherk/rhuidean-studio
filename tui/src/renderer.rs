@@ -32,7 +32,7 @@ pub fn theme_colors(light: bool) -> ThemeColors {
         }
     } else {
         ThemeColors {
-            ring: Color::Indexed(237),
+            ring: Color::Indexed(241),
             subdiv_primary: Color::White,
             subdiv_secondary: Color::Gray,
         }
