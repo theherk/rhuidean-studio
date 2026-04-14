@@ -106,6 +106,19 @@ async function main() {
         app.set_base_freq(f);
     });
 
+    const scaleEnabled = document.getElementById("scale-enabled");
+    const scaleOptions = document.getElementById("scale-options");
+    const scaleRoot = document.getElementById("scale-root");
+    const scaleType = document.getElementById("scale-type");
+
+    scaleEnabled.addEventListener("change", () => {
+        app.set_scale_enabled(scaleEnabled.checked);
+        scaleOptions.style.display = scaleEnabled.checked ? "" : "none";
+    });
+
+    scaleRoot.addEventListener("change", () => app.set_scale_root(scaleRoot.value));
+    scaleType.addEventListener("change", () => app.set_scale_type(scaleType.value));
+
     const filterEnabled = document.getElementById("filter-enabled");
     const filterCutoff = document.getElementById("filter-cutoff");
     const cutoffVal = document.getElementById("cutoff-val");
@@ -274,6 +287,10 @@ async function main() {
             orbitsEl.value = 12;
             velocityEl.value = "linear";
             tuningEl.value = "overtone";
+            scaleEnabled.checked = false;
+            scaleRoot.value = "A";
+            scaleType.value = "ionian";
+            scaleOptions.style.display = "none";
             waveformEl.value = "sine";
             subdivisionsEl.value = 1;
             speedEl.value = 1;
@@ -328,6 +345,12 @@ async function main() {
 
         app.set_velocity_mode(velocityEl.value);
         app.set_tuning(tuningEl.value);
+
+        app.set_scale_enabled(scaleEnabled.checked);
+        scaleOptions.style.display = scaleEnabled.checked ? "" : "none";
+        app.set_scale_root(scaleRoot.value);
+        app.set_scale_type(scaleType.value);
+
         app.set_waveform(waveformEl.value);
 
         const sub = parseInt(subdivisionsEl.value);
@@ -413,6 +436,11 @@ async function main() {
         p.set("o", orbitsEl.value);
         p.set("v", velocityEl.value);
         p.set("t", tuningEl.value);
+        if (scaleEnabled.checked) {
+            p.set("sc", "1");
+            if (scaleRoot.value !== "A") p.set("sr", scaleRoot.value);
+            if (scaleType.value !== "ionian") p.set("st2", scaleType.value);
+        }
         p.set("w", waveformEl.value);
         p.set("sub", subdivisionsEl.value);
         p.set("s", speedEl.value);
@@ -449,6 +477,9 @@ async function main() {
         if (p.has("o")) orbitsEl.value = p.get("o");
         if (p.has("v")) velocityEl.value = p.get("v");
         if (p.has("t")) tuningEl.value = p.get("t");
+        scaleEnabled.checked = p.has("sc");
+        if (p.has("sr")) scaleRoot.value = p.get("sr");
+        if (p.has("st2")) scaleType.value = p.get("st2");
         if (p.has("w")) waveformEl.value = p.get("w");
         if (p.has("sub")) subdivisionsEl.value = p.get("sub");
         if (p.has("s")) speedEl.value = p.get("s");

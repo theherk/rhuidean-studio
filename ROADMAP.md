@@ -6,7 +6,6 @@
 - **MIDI Output**: Use `navigator.requestMIDIAccess()` to send MIDI note-on/note-off messages, mapping each orbit to a configurable MIDI note and channel.
 - **MIDI Input**: Accept MIDI CC messages for real-time parameter control (speed, base frequency, subdivisions).
 - **Preset System**: Save and load named configurations via `localStorage`.
-- **Scale Constraint**: Quantize tuning output to a selected musical scale (major, minor, pentatonic, etc.) so the output always sounds harmonically coherent.
 
 ## Export
 

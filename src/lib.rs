@@ -2,6 +2,7 @@
 
 mod audio;
 mod renderer;
+mod scale;
 mod simulation;
 mod tuning;
 
@@ -10,6 +11,7 @@ use web_sys::{CanvasRenderingContext2d, HtmlCanvasElement};
 
 use audio::AudioEngine;
 use renderer::Renderer;
+use scale::ScaleType;
 use simulation::{OrbitalSystem, VelocityMode};
 use tuning::TuningSystem;
 
@@ -23,6 +25,9 @@ pub struct RhuideanStudio {
     speed: f64,
     running: bool,
     last_time: Option<f64>,
+    scale_enabled: bool,
+    scale_type: ScaleType,
+    scale_root: f64,
 }
 
 #[wasm_bindgen]
@@ -48,6 +53,9 @@ impl RhuideanStudio {
             speed: 1.0,
             running: false,
             last_time: None,
+            scale_enabled: false,
+            scale_type: ScaleType::Ionian,
+            scale_root: 261.63,
         })
     }
 
@@ -102,6 +110,32 @@ impl RhuideanStudio {
 
     pub fn set_base_freq(&mut self, freq: f64) {
         self.base_freq = freq;
+    }
+
+    pub fn set_scale_enabled(&mut self, enabled: bool) {
+        self.scale_enabled = enabled;
+    }
+
+    pub fn set_scale_type(&mut self, scale: &str) {
+        self.scale_type = ScaleType::from_str(scale);
+    }
+
+    pub fn set_scale_root(&mut self, note: &str) {
+        self.scale_root = match note {
+            "C" => 261.63,
+            "C#" => 277.18,
+            "D" => 293.66,
+            "D#" => 311.13,
+            "E" => 329.63,
+            "F" => 349.23,
+            "F#" => 369.99,
+            "G" => 392.00,
+            "G#" => 415.30,
+            "A" => 440.00,
+            "A#" => 466.16,
+            "B" => 493.88,
+            _ => 261.63,
+        };
     }
 
     pub fn set_filter_enabled(&mut self, enabled: bool) {
@@ -206,9 +240,12 @@ impl RhuideanStudio {
             let is_convergence = events.len() == num_orbits && num_orbits > 1;
 
             for event in &events {
-                let freq = self
-                    .tuning
-                    .frequency(event.orbit_index, num_orbits, self.base_freq);
+                let freq = if self.scale_enabled {
+                    scale::degree_frequency(event.orbit_index, self.scale_root, &self.scale_type)
+                } else {
+                    self.tuning
+                        .frequency(event.orbit_index, num_orbits, self.base_freq)
+                };
                 let _ = self
                     .audio
                     .play_tone(freq, event.orbit_index, num_orbits, is_convergence);

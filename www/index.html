@@ -75,6 +75,58 @@
                 </select>
             </div>
 
+            <div class="control-group" title="Assign each orbit to successive degrees of a musical scale">
+                <label>
+                    <input type="checkbox" id="scale-enabled"> Scale
+                </label>
+            </div>
+
+            <div id="scale-options" style="display:none">
+                <div class="control-group" title="Root note of the scale">
+                    <label for="scale-root">Root</label>
+                    <select id="scale-root">
+                        <option value="C">C</option>
+                        <option value="C#">C#</option>
+                        <option value="D">D</option>
+                        <option value="D#">D#</option>
+                        <option value="E">E</option>
+                        <option value="F">F</option>
+                        <option value="F#">F#</option>
+                        <option value="G">G</option>
+                        <option value="G#">G#</option>
+                        <option value="A" selected>A</option>
+                        <option value="A#">A#</option>
+                        <option value="B">B</option>
+                    </select>
+                </div>
+
+                <div class="control-group" title="Scale type to constrain pitches to">
+                    <label for="scale-type">Scale</label>
+                    <select id="scale-type">
+                        <optgroup label="Diatonic Modes">
+                            <option value="ionian">Ionian (Major)</option>
+                            <option value="dorian">Dorian</option>
+                            <option value="phrygian">Phrygian</option>
+                            <option value="lydian">Lydian</option>
+                            <option value="mixolydian">Mixolydian</option>
+                            <option value="aeolian">Aeolian (Minor)</option>
+                            <option value="locrian">Locrian</option>
+                        </optgroup>
+                        <optgroup label="Pentatonic">
+                            <option value="pentatonic_major">Major Pentatonic</option>
+                            <option value="pentatonic_minor">Minor Pentatonic</option>
+                        </optgroup>
+                        <optgroup label="Other">
+                            <option value="blues">Blues</option>
+                            <option value="whole_tone">Whole Tone</option>
+                            <option value="harmonic_minor">Harmonic Minor</option>
+                            <option value="melodic_minor">Melodic Minor</option>
+                            <option value="chromatic">Chromatic</option>
+                        </optgroup>
+                    </select>
+                </div>
+            </div>
+
             <div class="control-group" title="Oscillator shape; affects the timbre of triggered tones">
                 <label for="waveform">Waveform</label>
                 <select id="waveform">
