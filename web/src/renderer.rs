@@ -3,7 +3,7 @@ use std::f64::consts::TAU;
 use wasm_bindgen::prelude::*;
 use web_sys::CanvasRenderingContext2d;
 
-use crate::simulation::OrbitalSystem;
+use rhuidean_studio_core::simulation::OrbitalSystem;
 
 const TRAIL_LENGTH: usize = 8;
 
@@ -265,6 +265,7 @@ impl Renderer {
     fn apply_theme(&mut self) {
         self.theme = if self.light_mode {
             match self.theme_name.as_str() {
+                "catppuccin" => THEME_DEFAULT_LIGHT,
                 "classic" => THEME_CLASSIC_LIGHT,
                 "warm" => THEME_WARM_LIGHT,
                 "cool" => THEME_COOL_LIGHT,
@@ -274,6 +275,7 @@ impl Renderer {
             }
         } else {
             match self.theme_name.as_str() {
+                "catppuccin" => THEME_DEFAULT,
                 "classic" => THEME_CLASSIC,
                 "warm" => THEME_WARM,
                 "cool" => THEME_COOL,

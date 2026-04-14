@@ -1,13 +1,41 @@
-use serde::{Deserialize, Serialize};
 use std::f64::consts::TAU;
+use std::fmt;
+use std::str::FromStr;
 
-#[derive(Clone, Copy, Debug, Serialize, Deserialize, PartialEq)]
+#[derive(Clone, Copy, Debug, PartialEq)]
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 pub enum VelocityMode {
     Linear,
     Geometric,
     InverseSquare,
     HarmonicSeries,
     IntegerHarmonic,
+}
+
+impl FromStr for VelocityMode {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "linear" => Ok(Self::Linear),
+            "geometric" => Ok(Self::Geometric),
+            "inverse_square" => Ok(Self::InverseSquare),
+            "harmonic_series" => Ok(Self::HarmonicSeries),
+            "integer_harmonic" => Ok(Self::IntegerHarmonic),
+            _ => Err(()),
+        }
+    }
+}
+
+impl fmt::Display for VelocityMode {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match self {
+            Self::Linear => write!(f, "linear"),
+            Self::Geometric => write!(f, "geometric"),
+            Self::InverseSquare => write!(f, "inverse_square"),
+            Self::HarmonicSeries => write!(f, "harmonic_series"),
+            Self::IntegerHarmonic => write!(f, "integer_harmonic"),
+        }
+    }
 }
 
 #[derive(Clone, Debug)]

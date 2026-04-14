@@ -1,0 +1,17 @@
+[package]
+name = "rhuidean-studio"
+description = "A polyrhythmic orbital music visualizer."
+version.workspace = true
+edition.workspace = true
+repository.workspace = true
+license.workspace = true
+
+[[bin]]
+name = "rhuidean-studio"
+path = "src/main.rs"
+
+[dependencies]
+rhuidean-studio-core = { path = "../core" }
+ratatui = "0.29"
+crossterm = "0.28"
+cpal = "0.15"

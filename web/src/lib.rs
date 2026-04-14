@@ -2,18 +2,15 @@
 
 mod audio;
 mod renderer;
-mod scale;
-mod simulation;
-mod tuning;
 
 use wasm_bindgen::prelude::*;
 use web_sys::{CanvasRenderingContext2d, HtmlCanvasElement};
 
 use audio::AudioEngine;
 use renderer::Renderer;
-use scale::ScaleType;
-use simulation::{OrbitalSystem, VelocityMode};
-use tuning::TuningSystem;
+use rhuidean_studio_core::scale::{self, ScaleType};
+use rhuidean_studio_core::simulation::{OrbitalSystem, VelocityMode};
+use rhuidean_studio_core::tuning::{self, TuningSystem};
 
 #[wasm_bindgen]
 pub struct RhuideanStudio {
@@ -116,26 +113,12 @@ impl RhuideanStudio {
         self.scale_enabled = enabled;
     }
 
-    pub fn set_scale_type(&mut self, scale: &str) {
-        self.scale_type = ScaleType::from_str(scale);
+    pub fn set_scale_type(&mut self, s: &str) {
+        self.scale_type = s.parse().unwrap_or(ScaleType::Ionian);
     }
 
     pub fn set_scale_root(&mut self, note: &str) {
-        self.scale_root = match note {
-            "C" => 261.63,
-            "C#" => 277.18,
-            "D" => 293.66,
-            "D#" => 311.13,
-            "E" => 329.63,
-            "F" => 349.23,
-            "F#" => 369.99,
-            "G" => 392.00,
-            "G#" => 415.30,
-            "A" => 440.00,
-            "A#" => 466.16,
-            "B" => 493.88,
-            _ => 261.63,
-        };
+        self.scale_root = scale::note_to_hz(note);
     }
 
     pub fn set_filter_enabled(&mut self, enabled: bool) {

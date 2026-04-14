@@ -29,14 +29,14 @@ jobs:
           tool: wasm-pack
 
       - name: Build WASM
-        run: wasm-pack build --target web
+        run: wasm-pack build --target web web
 
       - name: Assemble site
         run: |
           mkdir -p _site/pkg
-          cp www/* _site/
-          cp pkg/rhuidean_studio_bg.wasm _site/pkg/
-          cp pkg/rhuidean_studio.js _site/pkg/
+          cp web/www/* _site/
+          cp web/pkg/rhuidean_studio_web_bg.wasm _site/pkg/
+          cp web/pkg/rhuidean_studio_web.js _site/pkg/
           echo "rhuidean.studio" > _site/CNAME
 
       - name: Fix import path

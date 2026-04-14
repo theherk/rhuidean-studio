@@ -1,0 +1,14 @@
+[package]
+name = "rhuidean-studio-core"
+description = "Core simulation and tuning logic for Rhuidean Studio."
+version.workspace = true
+edition.workspace = true
+repository.workspace = true
+license.workspace = true
+
+[features]
+default = []
+serde = ["dep:serde"]
+
+[dependencies]
+serde = { version = "1", features = ["derive"], optional = true }

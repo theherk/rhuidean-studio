@@ -1,4 +1,4 @@
-import init, { RhuideanStudio } from "../pkg/rhuidean_studio.js";
+import init, { RhuideanStudio } from "../pkg/rhuidean_studio_web.js";
 
 async function main() {
     await init();

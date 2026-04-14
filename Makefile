@@ -1,12 +1,15 @@
-.PHONY: build serve clean
+.PHONY: build-web build-tui serve clean
 
-build:
-	wasm-pack build --target web
+build-web:
+	wasm-pack build --target web web
 
-serve: build
-	@echo "Serving at http://localhost:8090/www/"
+build-tui:
+	cargo build --release -p rhuidean-studio
+
+serve: build-web
+	@echo "Serving at http://localhost:8090/web/www/"
 	python3 -m http.server 8090
 
 clean:
 	cargo clean
-	rm -rf pkg
+	rm -rf web/pkg

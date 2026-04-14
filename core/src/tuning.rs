@@ -1,6 +1,5 @@
-use serde::{Deserialize, Serialize};
-
-#[derive(Clone, Copy, Debug, Serialize, Deserialize)]
+#[derive(Clone, Copy, Debug)]
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 pub struct Interval {
     pub numerator: u32,
     pub denominator: u32,
@@ -162,12 +161,40 @@ pub fn lookup_interval(numerator: u32, denominator: u32) -> Option<&'static Inte
         .find(|i| i.numerator == numerator && i.denominator == denominator)
 }
 
-#[derive(Clone, Copy, Debug, Serialize, Deserialize, PartialEq)]
+use std::fmt;
+use std::str::FromStr;
+
+#[derive(Clone, Copy, Debug, PartialEq)]
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 pub enum TuningSystem {
     Overtone,
     EqualTemperament,
     JustIntonation,
     Pythagorean,
+}
+
+impl FromStr for TuningSystem {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "overtone" => Ok(Self::Overtone),
+            "equal_temperament" => Ok(Self::EqualTemperament),
+            "just_intonation" => Ok(Self::JustIntonation),
+            "pythagorean" => Ok(Self::Pythagorean),
+            _ => Err(()),
+        }
+    }
+}
+
+impl fmt::Display for TuningSystem {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match self {
+            Self::Overtone => write!(f, "overtone"),
+            Self::EqualTemperament => write!(f, "equal_temperament"),
+            Self::JustIntonation => write!(f, "just_intonation"),
+            Self::Pythagorean => write!(f, "pythagorean"),
+        }
+    }
 }
 
 const JUST_RATIOS_12: [f64; 12] = [
