@@ -6,6 +6,39 @@ use rhuidean_studio_core::simulation::OrbitalSystem;
 
 const CELL_ASPECT: f64 = 2.4;
 
+pub struct ThemeColors {
+    pub ring: Color,
+    pub subdiv_primary: Color,
+    pub subdiv_secondary: Color,
+}
+
+pub fn detect_light_bg() -> bool {
+    if let Ok(val) = std::env::var("COLORFGBG") {
+        if let Some(bg) = val.rsplit(';').next() {
+            if let Ok(n) = bg.parse::<u8>() {
+                return n > 8;
+            }
+        }
+    }
+    false
+}
+
+pub fn theme_colors(light: bool) -> ThemeColors {
+    if light {
+        ThemeColors {
+            ring: Color::Rgb(210, 210, 210),
+            subdiv_primary: Color::Indexed(243),
+            subdiv_secondary: Color::Indexed(248),
+        }
+    } else {
+        ThemeColors {
+            ring: Color::Indexed(237),
+            subdiv_primary: Color::White,
+            subdiv_secondary: Color::Gray,
+        }
+    }
+}
+
 pub fn orbit_color(index: usize, total: usize) -> Color {
     let hue = (index as f64 / total as f64) * 300.0;
     let (r, g, b) = hsl_to_rgb(hue, 0.65, 0.65);
@@ -124,6 +157,7 @@ pub fn draw_visualization(
     system: &OrbitalSystem,
     flash: &FlashState,
     convergence_lines: bool,
+    colors: &ThemeColors,
 ) {
     let buf = frame.buffer_mut();
     let w = area.width as f64;
@@ -147,7 +181,7 @@ pub fn draw_visualization(
                 orbit.radius_fraction,
                 angle,
                 "\u{00b7}",
-                Color::Indexed(240),
+                colors.ring,
                 false,
             );
         }
@@ -157,9 +191,9 @@ pub fn draw_visualization(
         let angle = s as f64 * TAU / system.subdivisions as f64;
         let steps = (max_radius * 2.0) as usize;
         let color = if s == 0 {
-            Color::Indexed(246)
+            colors.subdiv_primary
         } else {
-            Color::Indexed(243)
+            colors.subdiv_secondary
         };
         for step in 0..=steps {
             let t = step as f64 / steps as f64;
