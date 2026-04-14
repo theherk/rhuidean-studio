@@ -526,20 +526,25 @@ impl Renderer {
         {
             let alpha = self.convergence_timer * 0.6;
             let width = 1.0 + self.convergence_timer * 2.0;
-            let color = format!("rgba({flash_base}, {alpha})");
-            self.ctx.set_stroke_style_str(&color);
             self.ctx.set_line_width(width);
 
             let indices = &self.triggered_indices;
             let n = indices.len();
             for i in 0..n {
+                let idx = indices[i];
                 if let (Some(&(x0, y0)), Some(&(x1, y1))) = (
-                    current_positions.get(indices[i]),
+                    current_positions.get(idx),
                     current_positions.get(indices[(i + 1) % n]),
                 ) {
                     self.ctx.begin_path();
                     self.ctx.move_to(x0, y0);
                     self.ctx.line_to(x1, y1);
+                    self.ctx.set_stroke_style_str(&orbit_color_alpha(
+                        &self.theme,
+                        idx,
+                        num_orbits,
+                        alpha,
+                    ));
                     self.ctx.stroke();
                 }
             }
