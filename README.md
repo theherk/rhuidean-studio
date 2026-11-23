@@ -18,6 +18,13 @@ Install from [crates.io](https://crates.io/crates/rhuidean-studio):
 cargo install rhuidean-studio
 ```
 
+Or with Homebrew, or [mise](https://mise.jdx.dev) (binaries from the release page, once a release ships them):
+
+```sh
+brew install theherk/tap/rhuidean-studio
+mise use -g github:theherk/rhuidean-studio
+```
+
 Run:
 
 ```sh
