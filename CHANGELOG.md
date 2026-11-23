@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.3.1](https://github.com/theherk/rhuidean-studio/compare/0.3.0...0.3.1) (2026-11-23)
+
+
+### Bug Fixes
+
+* Commit Cargo.lock for locked release builds ([#5](https://github.com/theherk/rhuidean-studio/issues/5)) ([724672e](https://github.com/theherk/rhuidean-studio/commit/724672e8cc307794abfbd258cfdf9516efcd4d42))
+
 ## [0.3.0](https://github.com/theherk/rhuidean-studio/compare/0.2.1...0.3.0) (2026-11-23)
 
 
