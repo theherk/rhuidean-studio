@@ -58,6 +58,10 @@ fn print_help() {
     println!();
     println!("  -h, --help               Print help");
     println!("  -V, --version            Print version");
+    println!();
+    println!("Examples:");
+    println!("  rhuidean-studio --ratio 3/2 --orbits 12");
+    println!("  rhuidean-studio --scale dorian --scale-root D --tuning just_intonation");
 }
 
 fn main() -> io::Result<()> {
