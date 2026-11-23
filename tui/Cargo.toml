@@ -14,7 +14,7 @@ name = "rhuidean-studio"
 path = "src/main.rs"
 
 [dependencies]
-rhuidean-studio-core = { path = "../core", version = "0.3.1" }
+rhuidean-studio-core = { path = "../core", version = "0.3.2" }
 ratatui = "0.30"
 crossterm = "0.29"
 cpal = "0.17"
