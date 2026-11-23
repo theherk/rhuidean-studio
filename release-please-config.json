@@ -1,0 +1,19 @@
+{
+  "$schema": "https://raw.githubusercontent.com/googleapis/release-please/main/schemas/config.json",
+  "release-type": "simple",
+  "include-component-in-tag": false,
+  "include-v-in-tag": false,
+  "include-v-in-release-name": false,
+  "packages": {
+    ".": {
+      "extra-files": [
+        { "type": "toml", "path": "Cargo.toml", "jsonpath": "$.workspace.package.version" },
+        { "type": "toml", "path": "tui/Cargo.toml", "jsonpath": "$.dependencies['rhuidean-studio-core'].version" },
+        { "type": "toml", "path": "web/Cargo.toml", "jsonpath": "$.dependencies['rhuidean-studio-core'].version" },
+        { "type": "toml", "path": "Cargo.lock", "jsonpath": "$.package[?(@.name=='rhuidean-studio')].version" },
+        { "type": "toml", "path": "Cargo.lock", "jsonpath": "$.package[?(@.name=='rhuidean-studio-core')].version" },
+        { "type": "toml", "path": "Cargo.lock", "jsonpath": "$.package[?(@.name=='rhuidean-studio-web')].version" }
+      ]
+    }
+  }
+}
