@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.3.2](https://github.com/theherk/rhuidean-studio/compare/0.3.1...0.3.2) (2026-11-23)
+
+
+### Bug Fixes
+
+* Keep Cargo.lock in sync on release PRs ([#7](https://github.com/theherk/rhuidean-studio/issues/7)) ([3ee9a92](https://github.com/theherk/rhuidean-studio/commit/3ee9a921206d46bc173438cd7df4db26ab85b6e4))
+
 ## [0.3.1](https://github.com/theherk/rhuidean-studio/compare/0.3.0...0.3.1) (2026-11-23)
 
 
